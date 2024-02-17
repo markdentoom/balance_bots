@@ -69,9 +69,7 @@ class TestFactory(TestCase):
         self.assertEqual(self.factory.special_bot, None)
 
     def test_run_special_bot_value(self):
-        self.factory.give_microchip_to_bot = MagicMock(
-            return_value={2: (('output', 0), ('output', 1))}
-        )
+        self.factory.give_microchip_to_bot = MagicMock(return_value={2: (("output", 0), ("output", 1))})
 
         self.factory.current_bot_values = {2: [61, 17]}
         self.factory.run()

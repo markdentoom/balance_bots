@@ -13,7 +13,7 @@ class TestInstructions(TestCase):
             "value 3 goes to bot 1",
             "bot 1 gives low to output 1 and high to bot 0",
             "bot 0 gives low to output 2 and high to output 0",
-            "value 2 goes to bot 2"
+            "value 2 goes to bot 2",
         ]
         self.assertEqual(self.instructions.input_lines, expected_result)
 
@@ -50,9 +50,9 @@ class TestInstructions(TestCase):
     def test_bot_instructions(self):
         bot_instructions = self.instructions.bot_instructions()
         expected_result = {
-            0: (('output', 2), ('output', 0)),
-            1: (('output', 1), ('bot', 0)),
-            2: (('bot', 1), ('bot', 0))
+            0: (("output", 2), ("output", 0)),
+            1: (("output", 1), ("bot", 0)),
+            2: (("bot", 1), ("bot", 0)),
         }
-        
+
         self.assertEqual(bot_instructions, expected_result)
