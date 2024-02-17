@@ -5,7 +5,11 @@ from typing import Optional
 
 class Instructions:
     def __init__(self, file_path: str):
-        self.input_lines = self.get_initial_input_lines(file_path)
+        self._input_lines = self.get_initial_input_lines(file_path)
+
+    @property
+    def input_lines(self) -> list[str]:
+        return self._input_lines
 
     @staticmethod
     def get_initial_input_lines(file_path: str) -> list[str]:
@@ -54,12 +58,16 @@ class Instructions:
 
 class Factory:
     def __init__(self, instructions: Instructions):
-        self.bot_instructions = instructions.bot_instructions()
-        self.special_bot: Optional[int] = None  # Compares microchips 17 and 61
+        self._bot_instructions = instructions.bot_instructions()
 
         self.current_bot_values = instructions.initial_bot_values()
         self.current_bin_values = defaultdict(list)
         self.stack = [self.get_initial_bot_with_2_microchips()]
+        self.special_bot: Optional[int] = None  # Compares microchips 17 and 61
+
+    @property
+    def bot_instructions(self):
+        return self._bot_instructions
 
     def get_initial_bot_with_2_microchips(self) -> int:
         for bot, values in self.current_bot_values.items():
@@ -79,7 +87,7 @@ class Factory:
         else:
             raise ValueError(f"recipient_type should be 'bot' or 'output', not '{recipient_type}'")
 
-    def run(self) -> int:
+    def run(self) -> None:
         """
         self.stack consists of a list of bots that currently have two microchips.
         The while loop below has the bots pass them on until none of them have two anymore.
