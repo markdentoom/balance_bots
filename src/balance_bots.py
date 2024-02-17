@@ -2,10 +2,10 @@ import re
 
 
 class Instructions:
-    def __init__(self, file_path):
+    def __init__(self, file_path: str):
         self.file_path = file_path
 
-    def input_lines(self):
+    def input_lines(self) -> list[str]:
         with open(self.file_path) as file_content:
             return file_content.read().splitlines()
 
@@ -48,39 +48,38 @@ class Instructions:
 
         return bot_instructions
 
+if __name__ == "__main__":
+    input_file_instructions = Instructions("input.txt")
+    bots = input_file_instructions.initial_bot_values()
+    instructions = input_file_instructions.bot_instructions()
 
-input_file_instructions = Instructions("input.txt")
-bots = input_file_instructions.initial_bot_values()
-instructions = input_file_instructions.bot_instructions()
+    output = {}
+    # {17: [2], 4: [3],
+    # output 17 contains microchips [2], output 4 contains microchips [3]
+    while bots:
+        for bot, microchips in dict(bots).items():
+            if len(microchips) != 2:
+                continue
 
+            bot_instructions = bots.pop(bot)
+            microchip1, microchip2 = sorted(bot_instructions)
+            if microchip1 == 17 and microchip2 == 61:
+                print(
+                    f"Bot {bot} is responsible for comparing value-61 microchips with value-17 microchips"
+                )
 
-output = {}
-# {17: [2], 4: [3],
-# output 17 contains microchips [2], output 4 contains microchips [3]
-while bots:
-    for bot, microchips in dict(bots).items():
-        if len(microchips) != 2:
-            continue
+            (recipient1, gives_low_to), (recipient2, gives_high_to) = instructions[bot]
+            type1 = bots if recipient1 == "bot" else output
+            type2 = bots if recipient2 == "bot" else output
+            type1.setdefault(gives_low_to, []).append(microchip1)
+            type2.setdefault(gives_high_to, []).append(microchip2)
 
-        bot_instructions = bots.pop(bot)
-        microchip1, microchip2 = sorted(bot_instructions)
-        if microchip1 == 17 and microchip2 == 61:
-            print(
-                f"Bot {bot} is responsible for comparing value-61 microchips with value-17 microchips"
-            )
+    microchip1 = output[0][0]
+    microchip2 = output[1][0]
+    microchip3 = output[2][0]
+    result = microchip1 * microchip2 * microchip3
+    print(
+        f"You get {result} if you multiply together the values of one chip in each of outputs 0, 1, and 2"
+    )
 
-        (recipient1, gives_low_to), (recipient2, gives_high_to) = instructions[bot]
-        type1 = bots if recipient1 == "bot" else output
-        type2 = bots if recipient2 == "bot" else output
-        type1.setdefault(gives_low_to, []).append(microchip1)
-        type2.setdefault(gives_high_to, []).append(microchip2)
-
-microchip1 = output[0][0]
-microchip2 = output[1][0]
-microchip3 = output[2][0]
-result = microchip1 * microchip2 * microchip3
-print(
-    f"You get {result} if you multiply together the values of one chip in each of outputs 0, 1, and 2"
-)
-
-# Answers are 73 and 3965
+    # Answers are 73 and 3965
