@@ -13,9 +13,9 @@ class TestFactory(TestCase):
         self.assertEqual(self.factory.current_bot_values, self.instructions.initial_bot_values())
         self.assertEqual(self.factory.stack, [2])
 
-    def test_first_bot_with_2_microchips(self):
+    def test_get_initial_bot_with_2_microchips(self):
         expected_result = 2
-        self.assertEqual(self.factory.first_bot_with_2_microchips(), expected_result)
+        self.assertEqual(self.factory.get_initial_bot_with_2_microchips(), expected_result)
 
     def test_give_microchip_to_bot_with_existing_microchip(self):
         expected_initial = [3]
@@ -51,6 +51,12 @@ class TestFactory(TestCase):
         self.factory.give_microchip_to_recipient("output", 0, 2)
         expected_result = {0: [2]}
         self.assertEqual(self.factory.current_bin_values, expected_result)
+
+    def test_give_microchip_to_recipient_invalid_recipient_type(self):
+        expected_error_message = "recipient_type should be 'bot' or 'output', not 'peanut'"
+        with self.assertRaises(ValueError) as error:
+            self.factory.give_microchip_to_recipient("peanut", 0, 2)
+        self.assertEqual(str(error.exception), expected_error_message)
 
     def test_run_using_fixture(self):
         self.assertEqual(self.factory.current_bot_values, {2: [5, 2], 1: [3]})
