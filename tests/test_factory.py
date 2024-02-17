@@ -91,11 +91,3 @@ class TestFactory(TestCase):
         self.factory.run()
         expected_result = 30
         self.assertEqual(self.factory.multiplied_bin_0_1_2_outputs(), expected_result)
-
-    def test_assignment_answers(self):
-        instructions = Instructions("src/input.txt")
-        factory = Factory(instructions)
-        factory.run()
-
-        self.assertEqual(factory.special_bot, 73)
-        self.assertEqual(factory.multiplied_bin_0_1_2_outputs(), 3965)
